@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Javewaze</string>
+    <string name="btn_capturar">Capturala!</string>
 </resources>
