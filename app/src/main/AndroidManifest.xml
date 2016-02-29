@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fabi.javewaze">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,9 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EstatuaActivity"></activity>
+        <activity android:name=".EstatuaActivity" />
+        <activity android:name=".CafeteriaActivity"></activity>
     </application>
-
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
 
 </manifest>
