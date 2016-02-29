@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="fabi.javewaze.CafeteriaActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textView3"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_alignRight="@+id/textView3"
+        android:layout_alignEnd="@+id/textView3"
+        android:id="@+id/linearLayout3">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageCafeteria_image_cafeteria" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_toRightOf="@+id/textView3"
+        android:layout_toEndOf="@+id/textView3"
+        android:id="@+id/linearLayout4">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageFoto_image_cafeteria" />
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/linearLayout3"
+        android:layout_above="@+id/button2">
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="center_horizontal">
+            <TextView
+                android:id="@+id/tv_prod1" android:text="Nombre1"
+                android:layout_weight="1" android:background="#b0b0b0"
+                android:textColor="#000000"
+                android:padding="20dip" android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/tv_precio1" android:text="Precio1"
+                android:layout_weight="1" android:background="#a09f9f"
+                android:textColor="#000000"
+                android:padding="20dip" android:gravity="center"/>
+        </TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="center_horizontal">
+            <TextView
+                android:id="@+id/tv_prod2" android:text="Nombre2"
+                android:layout_weight="1" android:background="#b0b0b0"
+                android:textColor="#000000"
+                android:padding="20dip" android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/tv_precio2" android:text="Precio2"
+                android:layout_weight="1" android:background="#a09f9f"
+                android:textColor="#000000"
+                android:padding="20dip" android:gravity="center"/>
+        </TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="center_horizontal">
+            <TextView
+                android:id="@+id/tv_prod3" android:text="Nombre3"
+                android:layout_weight="1" android:background="#b0b0b0"
+                android:textColor="#000000"
+                android:padding="20dip" android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/tv_precio3" android:text="Precio3"
+                android:layout_weight="1" android:background="#a09f9f"
+                android:textColor="#000000"
+                android:padding="20dip" android:gravity="center"/>
+        </TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="center_horizontal">
+            <TextView
+                android:id="@+id/tv_prod4" android:text="Nombre4"
+                android:layout_weight="1" android:background="#b0b0b0"
+                android:textColor="#000000"
+                android:padding="20dip" android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/tv_precio4" android:text="Precio4"
+                android:layout_weight="1" android:background="#a09f9f"
+                android:textColor="#000000"
+                android:padding="20dip" android:gravity="center"/>
+        </TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="center_horizontal">
+            <TextView
+                android:id="@+id/tv_prod5" android:text="Nombre5"
+                android:layout_weight="1" android:background="#b0b0b0"
+                android:textColor="#000000"
+                android:padding="20dip" android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/tv_precio5" android:text="Precio5"
+                android:layout_weight="1" android:background="#a09f9f"
+                android:textColor="#000000"
+                android:padding="20dip" android:gravity="center"/>
+        </TableRow>
+
+    </TableLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_capturar"
+        android:id="@+id/button2"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/linearLayout4"
+        android:layout_toStartOf="@+id/linearLayout4"
+        android:onClick="click2"/>
+
+</RelativeLayout>

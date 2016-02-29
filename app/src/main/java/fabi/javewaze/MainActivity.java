@@ -31,8 +31,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        Intent i = new Intent(this, EstatuaActivity.class );
-        startActivity(i);
+        /*Intent i = new Intent(this, EstatuaActivity.class );
+        //Intent i = new Intent(this, EstatuaActivity.class );
+        Intent i = new Intent(this, CafeteriaActivity.class );
+        startActivity(i);*/
+
         medalla1 = (ImageView)findViewById(R.id.medalla1_imageView_main);
         medalla2 = (ImageView)findViewById(R.id.medalla2_imageView_main);
         medalla3 = (ImageView)findViewById(R.id.medalla3_imageView_main);
