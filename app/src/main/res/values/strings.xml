@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Javewaze</string>
+    <string name="titulo">Javewaze</string>
+    <string name="nombre">Nombre</string>
+    <string name="carrera">Carrera</string>
+    <string name="estado">Estado</string>
+    <string name="medallas">Medallas</string>
+    <string name="editarFotoPerfil">Editar</string>
+    <string name="guardarcambios">Guardar</string>
 </resources>
