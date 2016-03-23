@@ -26,10 +26,11 @@ public class EstatuaActivity extends AppCompatActivity {
         im.getLayoutParams().width=300;
         //im.setScaleType(ImageView.ScaleType.CENTER_CROP);
         im.setImageResource(R.mipmap.im_biblio);
-
     }
 
-
+    protected void onStart(){
+        super.onStart();
+    }
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -47,6 +48,7 @@ public class EstatuaActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             foto.setImageBitmap(imageBitmap);
+
         }
     }
 

@@ -44,6 +44,7 @@ public class CafeteriaActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             foto.setImageBitmap(imageBitmap);
+
         }
     }
 }
