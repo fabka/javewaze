@@ -1,11 +1,15 @@
 package fabi.javewaze;
 
+import android.Manifest;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -41,21 +45,24 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     Spinner estado_spinner;
     public static Sistema sistema = new Sistema(null);
     GPSTracker gps;
-    public NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    public NotificationManager mNotificationManager;
+    private static boolean activityVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        //persistir();
+        persistir();
         try {
             leerArchivo();
         } catch (IOException e) {
             e.printStackTrace();
+            Log.e("archivo ", e.toString());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        gps = GPSTracker.getInstance(this);
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        gps = GPSTracker.getInstance(this , mNotificationManager );
         /*Intent i = new Intent(this, EstatuaActivity.class );
         //Intent i = new Intent(this, EstatuaActivity.class );
         Intent i = new Intent(this, CafeteriaActivity.class );
@@ -85,11 +92,48 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         estado_spinner = (Spinner)findViewById(R.id.estado_spinner_main);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MainActivity.activityResumed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MainActivity.activityPaused();
+    }
+
     protected static Sistema getSistema(){
         return sistema;
     }
 
+    public static boolean isActivityVisible() {
+        return activityVisible;
+    }
+
+    public static void activityResumed() {
+        activityVisible = true;
+    }
+
+    public static void activityPaused() {
+        activityVisible = false;
+    }
+
     protected void persistir(){
+       String[] PERMISSIONS_STORAGE = {
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        };
+        int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_STORAGE,
+                    1
+            );
+        }
         //
         String san = "Representación de figura masculina en posición pedestre, viste habito Jesuita con casulla, " +
                 "cabellos cortos peinados hacia atrás, con barba y bigote, su brazo derecho se encuentra doblada a la " +
@@ -101,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         Estatua e = new Estatua(1, "San Francisco Javier" , R.mipmap.francisco , "Fernando Montañez", "1994" , san);
         Estatua e2 = new Estatua(2, "Velas al viento" , R.mipmap.velas , "Mauricio Arango", "2000" , vel);
 
-        Producto p1 = new Producto(1000 ,  "Té");
+        Producto p1 = new Producto(1000 ,  "Te");
         Producto p2 = new Producto(2300 ,  "Pescadito");
         Producto p3 = new Producto(1800 ,  "Empanada");
         Producto p4 = new Producto(2100 ,  "Arepa");
@@ -120,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         c2.productos.add(p3);
         c2.productos.add(p2);
         c2.productos.add(p1);
+        c2.productos.add(p5);
 
         Obra o1 = new Obra(1 , "Obra Ingenieria" ,  R.mipmap.obrainge);
         Obra o2 = new Obra(1 , "Obra Cubos" ,  R.mipmap.obracubos);
@@ -131,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         Medalla m5 = new Medalla("m5" , false);
         Medalla m6 = new Medalla("m6" , false);
 
-        Persona p = new Persona(" " , 0 , " " , " ");
+        Persona p = new Persona(" " , 0 , " " , "comida");
         p.medallas.add(m1);
         p.medallas.add(m2);
         p.medallas.add(m3);
@@ -159,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         sistema.eventos.add(ev4);
         sistema.eventos.add(ev5);
         sistema.eventos.add(ev6);
-
+        //Toast.makeText(this, "comienza", Toast.LENGTH_SHORT).show();
         try {
             File tarjeta = Environment.getExternalStorageDirectory();
             File file = new File(tarjeta.getAbsolutePath(), "persistencia.obj");
@@ -167,8 +212,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             salida.writeObject(sistema);
             salida.flush();
             salida.close();
-            Toast.makeText(this, "Los datos fueron grabados correctamente", Toast.LENGTH_SHORT).show();
+
+            //Toast.makeText(this, "Los datos fueron grabados correctamente", Toast.LENGTH_SHORT).show();
         } catch (IOException ioe) {
+            Log.e("archivo ", ioe.toString());
         }
 
         //

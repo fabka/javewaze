@@ -8,11 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class EstatuaActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     public ImageView im, foto;
+    private static boolean activityVisible = false;
+    TextView creador , inf, nombreest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,16 +23,47 @@ public class EstatuaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_estatua);
         foto = (ImageView) findViewById(R.id.imageFoto_image_estatua );
         im = (ImageView) findViewById(R.id.imageEstatua_image_estatua );
-        foto.getLayoutParams().height=300;
-        foto.getLayoutParams().width=300;
-        im.getLayoutParams().height=300;
-        im.getLayoutParams().width=300;
-        //im.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        im.setImageResource(R.mipmap.im_biblio);
+        creador = (TextView) findViewById(R.id.textView2 );
+        inf = (TextView) findViewById(R.id.textView5 );
+        nombreest = (TextView) findViewById(R.id.textView );
+        //foto.getLayoutParams().height=200;
+        //foto.getLayoutParams().width=100;
+        //im.getLayoutParams().height=200;
+        //im.getLayoutParams().width=100;
+        im.setScaleType(ImageView.ScaleType.FIT_XY);
+        foto.setScaleType(ImageView.ScaleType.FIT_XY);
+        Intent i = getIntent();
+        Bundle b = i.getExtras();
+        int id = b.getInt("id");
+        for(MainActivity.Estatua e :  MainActivity.getSistema().estatuas){
+            if(id == e.id){
+                im.setImageResource(e.foto);
+                nombreest.setTextSize(18);
+                nombreest.setText(e.nombre + "  (" + e.fecha + ")");
+                creador.setTextSize(15);
+                creador.setText("Creado por: " +e.creador);
+                inf.setTextSize(12);
+                inf.setText(e.info);
+            }
+        }
+
+        //im.setImageResource(R.mipmap.im_biblio);
     }
 
     protected void onStart(){
         super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EstatuaActivity.activityResumed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EstatuaActivity.activityPaused();
     }
 
     private void dispatchTakePictureIntent() {
@@ -48,8 +82,20 @@ public class EstatuaActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             foto.setImageBitmap(imageBitmap);
-
+            foto.setMaxWidth(2000);
         }
+    }
+
+    public static boolean isActivityVisible() {
+        return activityVisible;
+    }
+
+    public static void activityResumed() {
+        activityVisible = true;
+    }
+
+    public static void activityPaused() {
+        activityVisible = false;
     }
 
 }

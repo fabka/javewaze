@@ -46,17 +46,16 @@ public class GPSTracker extends Service implements LocationListener {
     // Manager de Localización
     protected LocationManager locationManager;
 
-    public NotificationManager mNotificationManager;
+    public static NotificationManager mNotificationManager;
 
     //Constructor
     public GPSTracker(Context context) {
         this.mContext = context; //Obtener el contexto
-        mNotificationManager = MainActivity.mNotificationManager;
     }
-    public static GPSTracker getInstance (Context c) {
+    public static GPSTracker getInstance (Context c , NotificationManager n   ) {
         if(gps==null){
             gps=new GPSTracker(c);
-
+            mNotificationManager = n;
         }
         gps.getLocation();
         return gps;
@@ -200,8 +199,8 @@ public class GPSTracker extends Service implements LocationListener {
     public void onLocationChanged(Location location) {
         String stLongitude = Location.convert(location.getLongitude() , Location.FORMAT_MINUTES);
         String stLatitude = Location.convert(location.getLatitude(), Location.FORMAT_MINUTES);
-        String [] ar1 = stLatitude.split("[.]");
-        String [] ar2 = stLongitude.split("[.]");
+        String [] ar1 = stLatitude.split("[.,]");
+        String [] ar2 = stLongitude.split("[.,]");
         double lat = -1 , lon = -1;
         if(ar1.length >1 && ar2.length >1) {
             lat = Double.parseDouble("0." + ar1[1]);
@@ -209,23 +208,41 @@ public class GPSTracker extends Service implements LocationListener {
             lat = lat * 60;
             lon = lon * -60;
         }
-        notificationBuilder("Hola" , EstatuaActivity.class , 1);
-        //Toast.makeText(mContext, "Holi" , Toast.LENGTH_LONG).show();
+        if(!primerPlano()) {
+            notificationBuilder("Holi", CafeteriaActivity.class, 1);
+        }else if (CafeteriaActivity.isActivityVisible() == false){
+            Intent i = new Intent(mContext , CafeteriaActivity.class);
+            i.putExtra("id" , 1);
+            mContext.startActivity(i);
+        }
+
         for(MainActivity.Evento e : MainActivity.getSistema().eventos){
                 if(lat >=  e.infizqlat && lon >= e.infizqlon && lat <= e.supderlat && lon <= e.supderlon ){
                     if(e.tipo==1){ //tipo estatua
                         for(MainActivity.Estatua es : MainActivity.getSistema().estatuas) {
-                            if(es.id == e.id) {
-                                Toast.makeText(mContext, es.nombre , Toast.LENGTH_LONG).show();
-                                notificationBuilder(es.nombre, EstatuaActivity.class, e.id);
+                            if(es.id == e.id && ( MainActivity.getSistema().persona.estado.equals("museo") || MainActivity.getSistema().persona.estado.equals("todo") ) ) {
+                                if(!primerPlano()) {
+                                    Toast.makeText(mContext, es.nombre, Toast.LENGTH_LONG).show();
+                                    notificationBuilder(es.nombre, EstatuaActivity.class, e.id);
+                                }else if (EstatuaActivity.isActivityVisible() == false){
+                                    Intent i = new Intent(mContext , EstatuaActivity.class);
+                                    i.putExtra("id", es.id);
+                                    mContext.startActivity(i);
+                                }
                             }
                         }
                     }
                     if(e.tipo==2){
                         for(MainActivity.Cafeteria caf : MainActivity.getSistema().cafeterias) {
-                            if(caf.id == e.id) {
-                                Toast.makeText(mContext, caf.nombre , Toast.LENGTH_LONG).show();
-                                notificationBuilder(caf.nombre , CafeteriaActivity.class, e.id);
+                            if(caf.id == e.id && (MainActivity.getSistema().persona.estado.equals("comida") || MainActivity.getSistema().persona.estado.equals("todo") ) ) {
+                                if(!primerPlano() ) {
+                                    Toast.makeText(mContext, caf.nombre, Toast.LENGTH_LONG).show();
+                                    notificationBuilder(caf.nombre, CafeteriaActivity.class, e.id);
+                                }else if (CafeteriaActivity.isActivityVisible() == false ){
+                                    Intent i = new Intent(mContext , CafeteriaActivity.class);
+                                    i.putExtra("id" , caf.id);
+                                    mContext.startActivity(i);
+                                }
                             }
 
                         }
@@ -233,8 +250,14 @@ public class GPSTracker extends Service implements LocationListener {
                     if(e.tipo==3){
                         for(MainActivity.Obra ob : MainActivity.getSistema().obras) {
                             if (ob.id == e.id) {
-                                Toast.makeText(mContext, ob.nombre , Toast.LENGTH_LONG).show();
-                                notificationBuilder(ob.nombre, ObraActivity.class, e.id);
+                                if(!primerPlano() ) {
+                                    Toast.makeText(mContext, ob.nombre, Toast.LENGTH_LONG).show();
+                                    notificationBuilder(ob.nombre, ObraActivity.class, e.id);
+                                }else if (ObraActivity.isActivityVisible() == false){
+                                    Intent i = new Intent(mContext , ObraActivity.class);
+                                    i.putExtra("id" , ob.id);
+                                    mContext.startActivity(i);
+                                }
                             }
                         }
                     }
@@ -274,7 +297,16 @@ public class GPSTracker extends Service implements LocationListener {
         if(mNotificationManager == null) {
             mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
-        mNotificationManager.notify(2, mBuilder.build());
+        mNotificationManager.notify(1, mBuilder.build());
+    }
+
+    public boolean primerPlano( ){
+        if(MainActivity.isActivityVisible() || EstatuaActivity.isActivityVisible() || CafeteriaActivity.isActivityVisible()
+                || ObraActivity.isActivityVisible()){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     @Override
