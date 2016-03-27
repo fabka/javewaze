@@ -144,16 +144,17 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/medalla3_imageView_main" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/medalla4_imageView_main" />
             </TableRow>
 
             <TableRow
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/medalla4_imageView_main" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -165,15 +166,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/medalla6_imageView_main" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/medalla7_imageView_main" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/medalla8_imageView_main" />
             </TableRow>
         </TableLayout>
 

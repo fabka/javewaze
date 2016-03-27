@@ -83,6 +83,10 @@ public class EstatuaActivity extends AppCompatActivity {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             foto.setImageBitmap(imageBitmap);
             foto.setMaxWidth(2000);
+            if(this.nombreest.getText().equals("San Francisco Javier"))
+                MainActivity.getSistema().persona.cambiarEstado(MainActivity.ESTATUA_SANFRANCISCOJAVIER);
+            else
+                MainActivity.getSistema().persona.cambiarEstado(MainActivity.ESTATUA_VELASALVIENTO);
         }
     }
 

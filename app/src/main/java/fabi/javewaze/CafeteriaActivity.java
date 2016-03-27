@@ -91,7 +91,10 @@ public class CafeteriaActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             foto.setImageBitmap(imageBitmap);
-
+            if(this.nombrecaf.getText().equals("Kiosko Ingeniería"))
+                MainActivity.getSistema().persona.cambiarEstado(MainActivity.CAFETERIA_KIOSCO);
+            else
+                MainActivity.getSistema().persona.cambiarEstado(MainActivity.CAFETERIA_PECERA);
         }
     }
 

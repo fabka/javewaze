@@ -76,6 +76,10 @@ public class ObraActivity extends AppCompatActivity {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             foto.setImageBitmap(imageBitmap);
             foto.setMaxWidth(2000);
+            if(this.nombreobra.getText().equals("Obra Ingeniería"))
+                MainActivity.getSistema().persona.cambiarEstado(MainActivity.OBRA_INGENIERIA);
+            else
+                MainActivity.getSistema().persona.cambiarEstado(MainActivity.OBRA_CUBOS);
         }
     }
 
