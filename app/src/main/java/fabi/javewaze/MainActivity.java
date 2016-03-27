@@ -102,12 +102,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             medalla2.setImageResource(R.mipmap.medal_star);
 
         if (sistema.persona.medallas.get(2).latiene)
-            medalla3.setImageResource(R.mipmap.medalla_estatua_velasAlViento);
+            medalla3.setImageResource(R.mipmap.medalla_estatua_velasalviento);
         else
             medalla3.setImageResource(R.mipmap.medal_star);
 
         if (sistema.persona.medallas.get(3).latiene)
-            medalla4.setImageResource(R.mipmap.medalla_estatua_sanFranciscoJavier);
+            medalla4.setImageResource(R.mipmap.medalla_estatua_sanfranciscojavier);
         else
             medalla4.setImageResource(R.mipmap.medal_star);
 
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         Medalla m6 = new Medalla(CAFETERIA_PECERA, false);
 
         Persona p = new Persona(" " , 0 , " " , "todo");
-        
+
         p.medallas.add(m1);
         p.medallas.add(m2);
         p.medallas.add(m3);
