@@ -93,7 +93,8 @@
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/estado_spinner_main" />
+                android:id="@+id/estado_spinner_main"
+                android:entries="@array/estado_spinner_values"/>
 
         </LinearLayout>
 
