@@ -208,13 +208,13 @@ public class GPSTracker extends Service implements LocationListener {
             lat = lat * 60;
             lon = lon * -60;
         }
-        if(!primerPlano()) {
-            notificationBuilder("Holi", CafeteriaActivity.class, 1);
-        }else if (CafeteriaActivity.isActivityVisible() == false){
-            Intent i = new Intent(mContext , CafeteriaActivity.class);
+        /*if(!primerPlano()) {
+            notificationBuilder("Holi", ObraActivity.class, 1);
+        }else if (ObraActivity.isActivityVisible() == false){
+            Intent i = new Intent(mContext , ObraActivity.class);
             i.putExtra("id" , 1);
             mContext.startActivity(i);
-        }
+        }*/
 
         for(MainActivity.Evento e : MainActivity.getSistema().eventos){
                 if(lat >=  e.infizqlat && lon >= e.infizqlon && lat <= e.supderlat && lon <= e.supderlon ){

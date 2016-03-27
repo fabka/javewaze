@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         c2.productos.add(p5);
 
         Obra o1 = new Obra(1 , "Obra Ingenieria" ,  R.mipmap.obrainge);
-        Obra o2 = new Obra(1 , "Obra Cubos" ,  R.mipmap.obracubos);
+        Obra o2 = new Obra(2 , "Obra Cubos" ,  R.mipmap.obracubos);
 
         Medalla m1 = new Medalla("m1" , false);
         Medalla m2 = new Medalla("m2" , false);
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         Medalla m5 = new Medalla("m5" , false);
         Medalla m6 = new Medalla("m6" , false);
 
-        Persona p = new Persona(" " , 0 , " " , "comida");
+        Persona p = new Persona(" " , 0 , " " , "todo");
         p.medallas.add(m1);
         p.medallas.add(m2);
         p.medallas.add(m3);
@@ -184,12 +184,19 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         p.medallas.add(m5);
         p.medallas.add(m6);
 
-        Evento ev1 = new Evento(1, 1, 44.900, -53.847, 45.465, -52.388); //Francisco
+        /*Evento ev1 = new Evento(1, 1, 44.900, -53.847, 45.465, -52.388); //Francisco
         Evento ev2 = new Evento(2, 1, 38.995, -52.718, 39.265, -52.334); //Velas
         Evento ev3 = new Evento(1, 2, 35.902, -49.614, 37.308, -49.200); //Kiosko
         Evento ev4 = new Evento(2, 2, 41.070, -53.540, 41.831, -52.443); //Pecera
         Evento ev5 = new Evento(1, 3, 37.043, -52.141, 38.484, -50.026); //Ingenieria
-        Evento ev6 = new Evento(2, 3, 38.298, -55.217, 40.777, -53.185); //Cubos
+        Evento ev6 = new Evento(2, 3, 38.298, -55.217, 40.777, -53.185); //Cubos */
+
+        Evento ev1 = new Evento(1, 1, 44.900, -53.8, 45.6, -53.0); //Francisco
+        Evento ev2 = new Evento(2, 1, 38.5, -53.0, 40.0, -52.1); //Velas
+        Evento ev3 = new Evento(1, 2, 35.5, -50.5, 39.5, -46.0); //Kiosko
+        Evento ev4 = new Evento(2, 2, 40.2, -53.15, 41.9, -52.2); //Pecera
+        Evento ev5 = new Evento(1, 3, 37.4, -53.2, 40.01, -48.5); //Ingenieria
+        Evento ev6 = new Evento(2, 3, 38.32, -55.3, 40.2, -52.3); //Cubos
 
         sistema.estatuas.add(e);
         sistema.estatuas.add(e2);
