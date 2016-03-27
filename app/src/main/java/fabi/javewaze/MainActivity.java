@@ -4,15 +4,18 @@ import android.Manifest;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -40,6 +43,11 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
     public static final String CAFETERIA_KIOSCO = "Kiosko Ingeniería";
     public static final String CAFETERIA_PECERA = "Pecera";
 
+    public static final String BUSCANDO_TODO = "Buscando de todo";
+    public static final String BUSCANDO_CAFETERIAS = "Buscando cafeterias";
+    public static final String BUSCANDO_OBRAS = "Buscando obras";
+    public static final String BUSCANDO_ESTATUAS = "Buscando estatuas";
+
     public static final int NUMERO_MEDALLAS = 6;
 
     ImageView medalla1;
@@ -52,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
     EditText nombre_editText;
     EditText carrera_editText;
     Spinner estado_spinner;
+    Button editarButton;
+
     public static Sistema sistema = new Sistema(null);
     GPSTracker gps;
     public NotificationManager mNotificationManager;
@@ -61,7 +71,25 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        persistir();
+
+        final String PREFS_NAME = "MyPrefsFile";
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+        if (settings.getBoolean("my_first_time", true)) {
+            //the app is being launched for first time, do something
+            Log.d("Comments", "First time");
+
+            // first time task
+
+            // record the fact that the app has been started at least once
+            settings.edit().putBoolean("my_first_time", false).commit();
+            persistir();
+            Toast.makeText(this, "Primera vez", Toast.LENGTH_LONG).show();
+        }
+
+        //Toast.makeText(this, "Primera vez", Toast.LENGTH_LONG).show();
+
+
         try {
             leerArchivo();
         } catch (IOException e) {
@@ -70,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         gps = GPSTracker.getInstance(this, mNotificationManager);
         /*Intent i = new Intent(this, EstatuaActivity.class );
@@ -84,6 +113,42 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
         medalla5 = (ImageView) findViewById(R.id.medalla5_imageView_main);
         medalla6 = (ImageView) findViewById(R.id.medalla6_imageView_main);
 
+        actualizarMedallas();
+
+        fotoPerfil = (ImageView) findViewById(R.id.profilepicture_imageView_main);
+        nombre_editText = (EditText) findViewById(R.id.nombre_editText_main);
+        carrera_editText = (EditText) findViewById(R.id.carrera_editText_main);
+        estado_spinner = (Spinner) findViewById(R.id.estado_spinner_main);
+        estado_spinner.setOnItemSelectedListener(this);
+        editarButton = (Button) findViewById(R.id.editarfotoperfil_button_main);
+    }
+
+    public void editarFotoPerfilButton (View v){
+        int pos = Integer.parseInt(carrera_editText.getText().toString());
+        switch (pos){
+            case 0:
+                sistema.persona.cambiarEstado(OBRA_INGENIERIA);
+                break;
+            case 1:
+                sistema.persona.cambiarEstado(OBRA_CUBOS);
+                break;
+            case 2:
+                sistema.persona.cambiarEstado(ESTATUA_VELASALVIENTO);
+                break;
+            case 3:
+                sistema.persona.cambiarEstado(ESTATUA_SANFRANCISCOJAVIER);
+                break;
+            case 4:
+                sistema.persona.cambiarEstado(CAFETERIA_KIOSCO);
+                break;
+            case 5:
+                sistema.persona.cambiarEstado(CAFETERIA_PECERA);
+                break;
+        }
+        actualizarMedallas();
+    }
+
+    public void actualizarMedallas(){
         if (sistema.persona.medallas.get(0).latiene)
             medalla1.setImageResource(R.mipmap.medalla_obra_ingenieria);
         else
@@ -113,13 +178,6 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
             medalla6.setImageResource(R.mipmap.medalla_cafeteria_pecera);
         else
             medalla6.setImageResource(R.mipmap.medal_star);
-
-
-        fotoPerfil = (ImageView) findViewById(R.id.profilepicture_imageView_main);
-        nombre_editText = (EditText) findViewById(R.id.nombre_editText_main);
-        carrera_editText = (EditText) findViewById(R.id.carrera_editText_main);
-        estado_spinner = (Spinner) findViewById(R.id.estado_spinner_main);
-        estado_spinner.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -164,7 +222,71 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
                     1
             );
         }
+
+        iniciarSistema();
+
+        try {
+            File tarjeta = Environment.getExternalStorageDirectory();
+            File file = new File(tarjeta.getAbsolutePath(), "persistencia.obj");
+            ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(file));
+            salida.writeObject(sistema);
+            salida.flush();
+            salida.close();
+
+            //Toast.makeText(this, "Los datos fueron grabados correctamente", Toast.LENGTH_SHORT).show();
+        } catch (IOException ioe) {
+            Log.e("archivo ", ioe.toString());
+        }
         //
+    }
+
+    protected void leerArchivo() throws IOException, ClassNotFoundException {
+        File tarjeta = Environment.getExternalStorageDirectory();
+        File file = new File(tarjeta.getAbsolutePath(), "persistencia.obj");
+        ObjectInputStream entrada = new ObjectInputStream(new FileInputStream(file));
+        Sistema obj1 = (Sistema) entrada.readObject();
+        entrada.close();
+        sistema = obj1;
+
+        //Toast.makeText(this," " + sistema.persona.edad+" "+ sistema.estatuas.get(1).nombre,Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (position){
+            case 0:
+                sistema.persona.estado = BUSCANDO_TODO;
+                break;
+            case 1:
+                sistema.persona.estado = BUSCANDO_CAFETERIAS;
+                break;
+            case 2:
+                sistema.persona.estado = BUSCANDO_OBRAS;
+                break;
+            case 3:
+                sistema.persona.estado = BUSCANDO_ESTATUAS;
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    public void iniciarSistema(){
+
         String san = "Representación de figura masculina en posición pedestre, viste habito Jesuita con casulla, " +
                 "cabellos cortos peinados hacia atrás, con barba y bigote, su brazo derecho se encuentra doblada a la " +
                 "altura del pecho, sujetando con su mano la parte frontal de la casulla, su brazo izquierdo lo lleva estirado " +
@@ -242,65 +364,6 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
         sistema.eventos.add(ev4);
         sistema.eventos.add(ev5);
         sistema.eventos.add(ev6);
-        //Toast.makeText(this, "comienza", Toast.LENGTH_SHORT).show();
-        try {
-            File tarjeta = Environment.getExternalStorageDirectory();
-            File file = new File(tarjeta.getAbsolutePath(), "persistencia.obj");
-            ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(file));
-            salida.writeObject(sistema);
-            salida.flush();
-            salida.close();
-
-            //Toast.makeText(this, "Los datos fueron grabados correctamente", Toast.LENGTH_SHORT).show();
-        } catch (IOException ioe) {
-            Log.e("archivo ", ioe.toString());
-        }
-        //
-    }
-
-    protected void leerArchivo() throws IOException, ClassNotFoundException {
-        File tarjeta = Environment.getExternalStorageDirectory();
-        File file = new File(tarjeta.getAbsolutePath(), "persistencia.obj");
-        ObjectInputStream entrada = new ObjectInputStream(new FileInputStream(file));
-        Sistema obj1 = (Sistema) entrada.readObject();
-        entrada.close();
-        sistema = obj1;
-
-        //Toast.makeText(this," " + sistema.persona.edad+" "+ sistema.estatuas.get(1).nombre,Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (position){
-            case 0:
-                //Manejar eventos de todo
-                break;
-            case 1:
-                //Manejar eventos de cafeterias
-                break;
-            case 2:
-                //Manejar eventos de obras
-                break;
-            case 3:
-                //Manejar eventos de Estatuas
-                break;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     public class Estatua implements Serializable {
