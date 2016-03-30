@@ -2,9 +2,11 @@ package fabi.javewaze;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,6 +38,11 @@ public class ObraActivity extends AppCompatActivity {
         for(MainActivity.Obra e :  MainActivity.getSistema().obras){
             if(id == e.id){
                 im.setImageResource(e.foto);
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                im.getLayoutParams().height = (int) (size.y*0.25);
+                foto.getLayoutParams().height = (int) (size.y*0.25);
                 nombreobra.setTextSize(18);
                 nombreobra.setText(e.nombre);
             }

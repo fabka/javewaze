@@ -2,10 +2,12 @@ package fabi.javewaze;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ public class EstatuaActivity extends AppCompatActivity {
         foto = (ImageView) findViewById(R.id.imageFoto_image_estatua );
         im = (ImageView) findViewById(R.id.imageEstatua_image_estatua );
         creador = (TextView) findViewById(R.id.textView2 );
+
         inf = (TextView) findViewById(R.id.textView5 );
         nombreest = (TextView) findViewById(R.id.textView );
         //foto.getLayoutParams().height=200;
@@ -37,7 +40,12 @@ public class EstatuaActivity extends AppCompatActivity {
         int id = b.getInt("id");
         for(MainActivity.Estatua e :  MainActivity.getSistema().estatuas){
             if(id == e.id){
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
                 im.setImageResource(e.foto);
+                im.getLayoutParams().height = (int) (size.y*0.25);
+                foto.getLayoutParams().height = (int) (size.y*0.25);
                 nombreest.setTextSize(18);
                 nombreest.setText(e.nombre + "  (" + e.fecha + ")");
                 creador.setTextSize(15);

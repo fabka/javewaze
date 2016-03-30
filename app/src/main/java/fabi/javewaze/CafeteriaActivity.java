@@ -2,10 +2,12 @@ package fabi.javewaze;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -46,6 +48,11 @@ public class CafeteriaActivity extends AppCompatActivity {
         for(MainActivity.Cafeteria e :  MainActivity.getSistema().cafeterias){
             if(id == e.id){
                 im.setImageResource(e.foto);
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                im.getLayoutParams().height = (int) (size.y*0.25);
+                foto.getLayoutParams().height = (int) (size.y*0.25);
                 nombrecaf.setTextSize(20);
                 nombrecaf.setText(e.nombre);
                 pro1.setText(e.productos.get(0).nombre);

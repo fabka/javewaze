@@ -209,13 +209,13 @@ public class GPSTracker extends Service implements LocationListener {
             lon = lon * -60;
         }
 
-        /*if(!primerPlano()) {
+        if(!primerPlano()) {
             notificationBuilder("Holi", ObraActivity.class, 1);
         }else if (ObraActivity.isActivityVisible() == false){
-            Intent i = new Intent(mContext , ObraActivity.class);
+            Intent i = new Intent(mContext , CafeteriaActivity.class);
             i.putExtra("id" , 2);
             mContext.startActivity(i);
-        }*/
+        }
 
         for(MainActivity.Evento e : MainActivity.getSistema().eventos){
                 String estado = MainActivity.getSistema().persona.estado;
