@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="estado_spinner_values">
-        <item>Buscando de todo</item>
-        <item>Buscando cafeteria</item>
-        <item>Buscando Obra</item>
-        <item>Buscando estatua</item>
+        <item>Modo Todoterreno</item>
+        <item>Modo Comida</item>
+        <item>Modo Museo</item>
     </string-array>
 </resources>

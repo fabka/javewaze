@@ -208,6 +208,7 @@ public class GPSTracker extends Service implements LocationListener {
             lat = lat * 60;
             lon = lon * -60;
         }
+
         /*if(!primerPlano()) {
             notificationBuilder("Holi", ObraActivity.class, 1);
         }else if (ObraActivity.isActivityVisible() == false){
@@ -217,10 +218,11 @@ public class GPSTracker extends Service implements LocationListener {
         }*/
 
         for(MainActivity.Evento e : MainActivity.getSistema().eventos){
+                String estado = MainActivity.getSistema().persona.estado;
                 if(lat >=  e.infizqlat && lon >= e.infizqlon && lat <= e.supderlat && lon <= e.supderlon ){
-                    if(e.tipo==1){ //tipo estatua
+                    if(e.tipo==1 ){ //tipo estatua
                         for(MainActivity.Estatua es : MainActivity.getSistema().estatuas) {
-                            if(es.id == e.id && ( MainActivity.getSistema().persona.estado.equals("museo") || MainActivity.getSistema().persona.estado.equals("todo") ) ) {
+                            if(es.id == e.id && ( MainActivity.getSistema().persona.estado.equals(MainActivity.MODO_MUSEO) || MainActivity.getSistema().persona.estado.equals(MainActivity.MODO_TODOTERRENO) ) ) {
                                 if(!primerPlano()) {
                                     Toast.makeText(mContext, es.nombre, Toast.LENGTH_LONG).show();
                                     notificationBuilder(es.nombre, EstatuaActivity.class, e.id);
@@ -234,7 +236,7 @@ public class GPSTracker extends Service implements LocationListener {
                     }
                     if(e.tipo==2){
                         for(MainActivity.Cafeteria caf : MainActivity.getSistema().cafeterias) {
-                            if(caf.id == e.id && (MainActivity.getSistema().persona.estado.equals("comida") || MainActivity.getSistema().persona.estado.equals("todo") ) ) {
+                            if(caf.id == e.id && (MainActivity.getSistema().persona.estado.equals(MainActivity.MODO_COMIDA) || MainActivity.getSistema().persona.estado.equals(MainActivity.MODO_TODOTERRENO) ) ) {
                                 if(!primerPlano() ) {
                                     Toast.makeText(mContext, caf.nombre, Toast.LENGTH_LONG).show();
                                     notificationBuilder(caf.nombre, CafeteriaActivity.class, e.id);
@@ -270,7 +272,7 @@ public class GPSTracker extends Service implements LocationListener {
         broadcastIntent.putExtra("lon", location.getLongitude());
 
         mContext.sendBroadcast(broadcastIntent);*/
-        Toast.makeText(mContext, "La localizacion es: - \nLat: " + lat + "\nLong: " + lon, Toast.LENGTH_LONG).show();
+        //Toast.makeText(mContext, "La localizacion es: - \nLat: " + lat + "\nLong: " + lon, Toast.LENGTH_LONG).show();
 
     }
 

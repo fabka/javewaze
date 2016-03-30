@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ObraActivity extends AppCompatActivity {
 
@@ -66,9 +67,7 @@ public class ObraActivity extends AppCompatActivity {
         }
     }
 
-    public void click3 (View v){
-        dispatchTakePictureIntent();
-    }
+    public void click3 (View v){ dispatchTakePictureIntent();  }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -77,9 +76,10 @@ public class ObraActivity extends AppCompatActivity {
             foto.setImageBitmap(imageBitmap);
             foto.setMaxWidth(2000);
             if(this.nombreobra.getText().equals("Obra Ingeniería"))
-                MainActivity.getSistema().persona.cambiarEstado(MainActivity.OBRA_INGENIERIA);
+                MainActivity.getSistema().persona.cambiarEstadoMedalla(MainActivity.OBRA_INGENIERIA);
             else
-                MainActivity.getSistema().persona.cambiarEstado(MainActivity.OBRA_CUBOS);
+                MainActivity.getSistema().persona.cambiarEstadoMedalla(MainActivity.OBRA_CUBOS);
+            MainActivity.persistir();
         }
     }
 

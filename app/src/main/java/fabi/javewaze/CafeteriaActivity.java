@@ -82,9 +82,7 @@ public class CafeteriaActivity extends AppCompatActivity {
         }
     }
 
-    public void click2 (View v){
-        dispatchTakePictureIntent();
-    }
+    public void click2 (View v){ dispatchTakePictureIntent(); }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -92,9 +90,10 @@ public class CafeteriaActivity extends AppCompatActivity {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             foto.setImageBitmap(imageBitmap);
             if(this.nombrecaf.getText().equals("Kiosko Ingeniería"))
-                MainActivity.getSistema().persona.cambiarEstado(MainActivity.CAFETERIA_KIOSCO);
+                MainActivity.getSistema().persona.cambiarEstadoMedalla(MainActivity.CAFETERIA_KIOSCO);
             else
-                MainActivity.getSistema().persona.cambiarEstado(MainActivity.CAFETERIA_PECERA);
+                MainActivity.getSistema().persona.cambiarEstadoMedalla(MainActivity.CAFETERIA_PECERA);
+            MainActivity.persistir();
         }
     }
 

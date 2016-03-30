@@ -1,15 +1,10 @@
 package fabi.javewaze;
 
-import android.Manifest;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Environment;
-import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,18 +16,9 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import fabi.javewaze.R;
 
 public class MainActivity extends AppCompatActivity implements Serializable, AdapterView.OnItemSelectedListener {
 
@@ -43,10 +29,11 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
     public static final String CAFETERIA_KIOSCO = "Kiosko Ingeniería";
     public static final String CAFETERIA_PECERA = "Pecera";
 
-    public static final String BUSCANDO_TODO = "Buscando de todo";
-    public static final String BUSCANDO_CAFETERIAS = "Buscando cafeterias";
-    public static final String BUSCANDO_OBRAS = "Buscando obras";
-    public static final String BUSCANDO_ESTATUAS = "Buscando estatuas";
+    public static final String MODO_TODOTERRENO = "MODO_TODOTERRENO";
+    public static final String MODO_MUSEO = "MODO_MUSEO";
+    public static final String MODO_COMIDA = "MODO_COMIDA";
+
+
 
     public static final int NUMERO_MEDALLAS = 6;
 
@@ -76,19 +63,11 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
         if (settings.getBoolean("my_first_time", true)) {
-            //the app is being launched for first time, do something
-            Log.d("Comments", "First time");
-
-            // first time task
-
-            // record the fact that the app has been started at least once
+            Log.d("mainActivity","Entro por primera vez");
             settings.edit().putBoolean("my_first_time", false).commit();
+            iniciarSistema();
             persistir();
-            Toast.makeText(this, "Primera vez", Toast.LENGTH_LONG).show();
         }
-
-        //Toast.makeText(this, "Primera vez", Toast.LENGTH_LONG).show();
-
 
         try {
             leerArchivo();
@@ -124,28 +103,74 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
     }
 
     public void editarFotoPerfilButton (View v){
+        //pruebaMedallas();
+    }
+
+    /*
+    *  Pruebas
+    * */
+
+    public void ingenieriaButton( View v){
+        Intent i = new Intent(this, ObraActivity.class);
+        i.putExtra("id",1);
+        startActivity(i);
+    }
+
+    public void franciscoButton( View v){
+        Intent i = new Intent(this, EstatuaActivity.class);
+        i.putExtra("id",1);
+        startActivity(i);
+    }
+
+    public void cubosButton( View v){
+        Intent i = new Intent(this, ObraActivity.class);
+        i.putExtra("id",2);
+        startActivity(i);
+    }
+
+    public void velasButton( View v){
+        Intent i = new Intent(this, EstatuaActivity.class);
+        i.putExtra("id",2);
+        startActivity(i);
+    }
+
+    public void kioscoButton( View v){
+        Intent i = new Intent(this, CafeteriaActivity.class);
+        i.putExtra("id",1);
+        startActivity(i);
+    }
+
+    public void peceraButton( View v){
+        Intent i = new Intent(this, CafeteriaActivity.class);
+        i.putExtra("id",2);
+        startActivity(i);
+    }
+
+
+    public void pruebaMedallas(){
         int pos = Integer.parseInt(carrera_editText.getText().toString());
         switch (pos){
             case 0:
-                sistema.persona.cambiarEstado(OBRA_INGENIERIA);
+                sistema.persona.cambiarEstadoMedalla(OBRA_INGENIERIA);
                 break;
             case 1:
-                sistema.persona.cambiarEstado(OBRA_CUBOS);
+                sistema.persona.cambiarEstadoMedalla(OBRA_CUBOS);
                 break;
             case 2:
-                sistema.persona.cambiarEstado(ESTATUA_VELASALVIENTO);
+                sistema.persona.cambiarEstadoMedalla(ESTATUA_VELASALVIENTO);
                 break;
             case 3:
-                sistema.persona.cambiarEstado(ESTATUA_SANFRANCISCOJAVIER);
+                sistema.persona.cambiarEstadoMedalla(ESTATUA_SANFRANCISCOJAVIER);
                 break;
             case 4:
-                sistema.persona.cambiarEstado(CAFETERIA_KIOSCO);
+                sistema.persona.cambiarEstadoMedalla(CAFETERIA_KIOSCO);
                 break;
             case 5:
-                sistema.persona.cambiarEstado(CAFETERIA_PECERA);
+                sistema.persona.cambiarEstadoMedalla(CAFETERIA_PECERA);
                 break;
         }
         actualizarMedallas();
+        persistir();
     }
 
     public void actualizarMedallas(){
@@ -208,23 +233,28 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
         activityVisible = false;
     }
 
-    protected void persistir() {
-        String[] PERMISSIONS_STORAGE = {
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-        };
-        int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    PERMISSIONS_STORAGE,
-                    1
-            );
+    public static void persistir() {
+        try {
+            File tarjeta = Environment.getExternalStorageDirectory();
+            File file = new File(tarjeta.getAbsolutePath(), "persistencia.obj");
+            ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(file));
+            Log.d("mainActivity","guardando");
+            for( Medalla m: sistema.persona.medallas){
+                if (m.latiene)
+                    Log.d("mainActivity","tiene "+m.nombre);
+                else
+                    Log.d("mainActivity","No tiene "+m.nombre);
+            }
+            salida.writeObject(sistema);
+            salida.flush();
+            salida.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
+        //
+    }
 
-        iniciarSistema();
-
+    public static void persistir( Context c) {
         try {
             File tarjeta = Environment.getExternalStorageDirectory();
             File file = new File(tarjeta.getAbsolutePath(), "persistencia.obj");
@@ -232,10 +262,9 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
             salida.writeObject(sistema);
             salida.flush();
             salida.close();
-
-            //Toast.makeText(this, "Los datos fueron grabados correctamente", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(c,"Archivo Guardado",Toast.LENGTH_LONG).show();
         } catch (IOException ioe) {
-            Log.e("archivo ", ioe.toString());
+            ioe.printStackTrace();
         }
         //
     }
@@ -247,7 +276,13 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
         Sistema obj1 = (Sistema) entrada.readObject();
         entrada.close();
         sistema = obj1;
-
+        Log.d("mainActivity","leyendo");
+        for( Medalla m: sistema.persona.medallas){
+            if (m.latiene)
+                Log.d("mainActivity","tiene "+m.nombre);
+            else
+                Log.d("mainActivity","No tiene "+m.nombre);
+        }
         //Toast.makeText(this," " + sistema.persona.edad+" "+ sistema.estatuas.get(1).nombre,Toast.LENGTH_LONG).show();
 
     }
@@ -266,16 +301,16 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (position){
             case 0:
-                sistema.persona.estado = BUSCANDO_TODO;
+                sistema.persona.estado = MODO_TODOTERRENO;
                 break;
             case 1:
-                sistema.persona.estado = BUSCANDO_CAFETERIAS;
+                sistema.persona.estado = MODO_COMIDA;
                 break;
             case 2:
-                sistema.persona.estado = BUSCANDO_OBRAS;
+                sistema.persona.estado = MODO_MUSEO;
                 break;
-            case 3:
-                sistema.persona.estado = BUSCANDO_ESTATUAS;
+            default:
+                sistema.persona.estado = MODO_TODOTERRENO;
                 break;
         }
     }
@@ -454,7 +489,7 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
             this.medallas = new ArrayList<Medalla>();
         }
 
-        public boolean cambiarEstado(String nombre) {
+        public boolean cambiarEstadoMedalla(String nombre) {
             for (Medalla m : medallas) {
                 if (m.nombre.equals(nombre)) {
                     m.latiene = true;

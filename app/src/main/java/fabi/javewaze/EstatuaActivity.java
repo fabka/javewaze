@@ -73,9 +73,7 @@ public class EstatuaActivity extends AppCompatActivity {
         }
     }
 
-    public void click (View v){
-        dispatchTakePictureIntent();
-    }
+    public void click (View v){ dispatchTakePictureIntent(); }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -84,9 +82,10 @@ public class EstatuaActivity extends AppCompatActivity {
             foto.setImageBitmap(imageBitmap);
             foto.setMaxWidth(2000);
             if(this.nombreest.getText().equals("San Francisco Javier"))
-                MainActivity.getSistema().persona.cambiarEstado(MainActivity.ESTATUA_SANFRANCISCOJAVIER);
+                MainActivity.getSistema().persona.cambiarEstadoMedalla(MainActivity.ESTATUA_SANFRANCISCOJAVIER);
             else
-                MainActivity.getSistema().persona.cambiarEstado(MainActivity.ESTATUA_VELASALVIENTO);
+                MainActivity.getSistema().persona.cambiarEstadoMedalla(MainActivity.ESTATUA_VELASALVIENTO);
+            MainActivity.persistir();
         }
     }
 
