@@ -213,7 +213,7 @@ public class GPSTracker extends Service implements LocationListener {
             notificationBuilder("Holi", ObraActivity.class, 1);
         }else if (ObraActivity.isActivityVisible() == false){
             Intent i = new Intent(mContext , ObraActivity.class);
-            i.putExtra("id" , 1);
+            i.putExtra("id" , 2);
             mContext.startActivity(i);
         }*/
 

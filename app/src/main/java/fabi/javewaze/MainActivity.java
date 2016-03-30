@@ -102,51 +102,6 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
         editarButton = (Button) findViewById(R.id.editarfotoperfil_button_main);
     }
 
-    public void editarFotoPerfilButton (View v){
-        //pruebaMedallas();
-    }
-
-    /*
-    *  Pruebas
-    * */
-
-    public void ingenieriaButton( View v){
-        Intent i = new Intent(this, ObraActivity.class);
-        i.putExtra("id",1);
-        startActivity(i);
-    }
-
-    public void franciscoButton( View v){
-        Intent i = new Intent(this, EstatuaActivity.class);
-        i.putExtra("id",1);
-        startActivity(i);
-    }
-
-    public void cubosButton( View v){
-        Intent i = new Intent(this, ObraActivity.class);
-        i.putExtra("id",2);
-        startActivity(i);
-    }
-
-    public void velasButton( View v){
-        Intent i = new Intent(this, EstatuaActivity.class);
-        i.putExtra("id",2);
-        startActivity(i);
-    }
-
-    public void kioscoButton( View v){
-        Intent i = new Intent(this, CafeteriaActivity.class);
-        i.putExtra("id",1);
-        startActivity(i);
-    }
-
-    public void peceraButton( View v){
-        Intent i = new Intent(this, CafeteriaActivity.class);
-        i.putExtra("id",2);
-        startActivity(i);
-    }
-
-
     public void pruebaMedallas(){
         int pos = Integer.parseInt(carrera_editText.getText().toString());
         switch (pos){
@@ -209,12 +164,14 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
     protected void onResume() {
         super.onResume();
         MainActivity.activityResumed();
+        actualizarMedallas();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         MainActivity.activityPaused();
+        actualizarMedallas();
     }
 
     protected static Sistema getSistema() {
