@@ -94,12 +94,18 @@ public class MainActivity extends AppCompatActivity implements Serializable, Ada
 
         actualizarMedallas();
 
-        fotoPerfil = (ImageView) findViewById(R.id.profilepicture_imageView_main);
+        //fotoPerfil = (ImageView) findViewById(R.id.profilepicture_imageView_main);
         nombre_editText = (EditText) findViewById(R.id.nombre_editText_main);
         carrera_editText = (EditText) findViewById(R.id.carrera_editText_main);
         estado_spinner = (Spinner) findViewById(R.id.estado_spinner_main);
         estado_spinner.setOnItemSelectedListener(this);
-        editarButton = (Button) findViewById(R.id.editarfotoperfil_button_main);
+        //editarButton = (Button) findViewById(R.id.editarfotoperfil_button_main);
+    }
+
+    public void estatuaTest(View v){
+        Intent i = new Intent(this , CafeteriaActivity.class);
+        i.putExtra("id" , 2);
+        startActivity(i);
     }
 
     public void pruebaMedallas(){
